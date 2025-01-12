@@ -10,10 +10,11 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        ('share/' + 'turtlebot3_msgs', glob('msg/*.msg')),  # ✅ 메시지 추가
         ('share/' + package_name + '/launch', glob('launch/*.py')),
         ('share/' + package_name + '/map', glob('map/*')),
     ],
-    install_requires=['setuptools'],
+    install_requires=['setuptools','turtle_bot3_msgs'],
     zip_safe=True,
     maintainer='rokey',
     maintainer_email='rokey@todo.todo',
@@ -22,6 +23,9 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': ['initial_pose_publisher = serving_turtle.initial_pose_publisher:main',
-        'waypoint_navigator = serving_turtle.waypoint_navigator:main',],
+        'waypoint_navigator = serving_turtle.waypoint_navigator:main',
+        'table_gui = serving_turtle.gui.table.table_gui:main',
+        'table_node = serving_turtle.gui.table.table_node:main',
+        'kitchen_main = serving_turtle.gui.kitchen.main:main',],
     },
 )
