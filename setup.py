@@ -22,9 +22,9 @@ setup(
     license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={
-        'console_scripts': ['initial_pose_publisher = serving_turtle.initial_pose_publisher:main',
-        'waypoint_navigator = serving_turtle.waypoint_navigator:main',
-        'table_main = serving_turtle.gui.table.main:main',
-        'kitchen_main = serving_turtle.gui.kitchen.main:main',],
+        'console_scripts': [
+        'robot_main = serving_turtle.robot.main:main',
+        'table_main = serving_turtle.table.main:main',
+        'kitchen_main = serving_turtle.kitchen.main:main',],
     },
 )

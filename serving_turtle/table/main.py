@@ -1,7 +1,7 @@
 import rclpy
 from rclpy.executors import MultiThreadedExecutor
-from serving_turtle.gui.table.table_ros_node import OrderPublisherNode
-from serving_turtle.gui.table.table_gui import TableGUI
+from serving_turtle.table.table_ros_node import OrderPublisherNode
+from serving_turtle.table.table_gui import TableGUI
 import threading  # ✅ 추가
 def main(args=None):
     rclpy.init(args=args)
