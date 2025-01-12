@@ -11,10 +11,10 @@ setup(
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
         ('share/' + 'turtlebot3_msgs', glob('msg/*.msg')),  # ✅ 메시지 추가
-        ('share/' + package_name + '/launch', glob('launch/*.py')),
+        ('share/' + package_name + '/launch', glob('launch/**/*.launch.py')),
         ('share/' + package_name + '/map', glob('map/*')),
     ],
-    install_requires=['setuptools','turtle_bot3_msgs'],
+    install_requires=['setuptools','rclpy', 'turtle_bot3_msgs'],
     zip_safe=True,
     maintainer='rokey',
     maintainer_email='rokey@todo.todo',
@@ -24,8 +24,7 @@ setup(
     entry_points={
         'console_scripts': ['initial_pose_publisher = serving_turtle.initial_pose_publisher:main',
         'waypoint_navigator = serving_turtle.waypoint_navigator:main',
-        'table_gui = serving_turtle.gui.table.table_gui:main',
-        'table_node = serving_turtle.gui.table.table_node:main',
+        'table_main = serving_turtle.gui.table.main:main',
         'kitchen_main = serving_turtle.gui.kitchen.main:main',],
     },
 )

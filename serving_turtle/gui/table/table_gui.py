@@ -2,13 +2,9 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
 import os
-import threading
-from . import table_order 
-import rclpy
 
-#WORKSPACE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-#IMAGES_DIR = os.path.join(WORKSPACE_DIR, 'images')
 IMAGES_DIR = "/home/rokey/turtlebot3_ws/src/serving_turtle/images"
+
 MENU = {
     "Cheese Burger": {"price": 10000, "image": os.path.join(IMAGES_DIR, "cheese_burger.png")},
     "Fries": {"price": 8000, "image": os.path.join(IMAGES_DIR, "fries.png")},
@@ -88,20 +84,3 @@ class TableGUI:
 
     def run(self):
         self.root.mainloop()
-
-def main():
-    rclpy.init()
-    publisher_node = table_order.OrderPublisherNode()  
-    gui_thread = threading.Thread(target=lambda: TableGUI(publisher_node).run())
-    gui_thread.start()
-
-    try:
-        rclpy.spin(publisher_node)
-    except KeyboardInterrupt:
-        pass
-    finally:
-        publisher_node.destroy_node()
-        rclpy.shutdown()
-
-if __name__ == "__main__":
-    main()
