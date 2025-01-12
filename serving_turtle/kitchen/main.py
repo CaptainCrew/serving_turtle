@@ -1,6 +1,6 @@
 import rclpy
 from threading import Thread
-from serving_turtle.kitchen.kitchen_ros_node import KitchenROSNode
+from serving_turtle.kitchen.kitchen_server import KitchenROSNode
 from serving_turtle.kitchen.kitchen_gui import KitchenGUI
 
 def ros_spin(node):

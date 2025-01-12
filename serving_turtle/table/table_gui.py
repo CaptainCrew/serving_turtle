@@ -14,8 +14,8 @@ MENU = {
 }
 
 class TableGUI:
-    def __init__(self, publisher_node):
-        self.publisher_node = publisher_node
+    def __init__(self, action_client):
+        self.action_client = action_client  # ✅ Action 클라이언트 연결
 
         self.root = tk.Tk()
         self.root.title("Table Node - Restaurant Order System")
@@ -72,15 +72,15 @@ class TableGUI:
                 continue
 
         if not order_details:
-            self.status_label.config(text="수량을 입력하세요.", fg="red")
+            self.update_status("수량을 입력하세요.", "red")
             return
 
-        self.publisher_node.publish_order(order_details, total_quantity)
-        self.status_label.config(text="주문 전송 완료!", fg="green")
+        self.action_client.send_order(order_details, total_quantity)
+        self.update_status("주문을 전송했습니다.", "blue")
 
-        for spinbox in self.menu_widgets.values():
-            spinbox.delete(0, tk.END)
-            spinbox.insert(0, "0")
+    def update_status(self, message, color):
+        """상태 라벨 업데이트"""
+        self.status_label.config(text=message, fg=color)
 
     def run(self):
         self.root.mainloop()
