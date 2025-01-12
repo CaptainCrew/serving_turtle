@@ -1,9 +1,9 @@
 # main.py
 import rclpy
 from rclpy.node import Node
-from waypoints import Waypoints
-from navigator import Navigator
-from service_server import WaypointServiceServer
+from serving_turtle.robot.waypoints import Waypoints
+from serving_turtle.robot.navigator import Navigator
+from serving_turtle.robot.service_server import WaypointServiceServer
 
 class WaypointNavigatorNode(Node):
     def __init__(self):

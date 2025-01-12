@@ -1,15 +1,15 @@
 # service_server.py
-from turtlebot3_msgs.srv import waypoint_service
+from turtlebot3_msgs.srv import RobotCommand
 
 class WaypointServiceServer:
     def __init__(self, node, waypoints, navigator):
         self.node = node
         self.waypoints = waypoints
         self.navigator = navigator
-        self.service = node.create_service(waypoint_service, 'navigate_to_waypoint', self.handle_service)
+        self.service = node.create_service(RobotCommand, 'navigate_to_waypoint', self.handle_service)
 
     def handle_service(self, request, response):
-        waypoint_id = request.waypoint_id.strip().upper()
+        waypoint_id = request.command.strip().upper()
         if waypoint_id not in self.waypoints.waypoints:
             response.success = False
             response.message = f"알 수 없는 Waypoint: {waypoint_id}"

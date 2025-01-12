@@ -1,11 +1,8 @@
 import rclpy
 from rclpy.node import Node
-from turtlebot3_msgs.msg import Order, OrderStatusMsg
-#from database_handler import DatabaseHandler
-import rclpy
-from rclpy.node import Node
 from rclpy.action import ActionServer, CancelResponse, GoalResponse
 from turtlebot3_msgs.action import OrderFood
+from turtlebot3_msgs.srv import RobotCommand  # ✅ 서비스 클라이언트로 사용
 import time
 
 class KitchenROSNode(Node):
@@ -13,15 +10,20 @@ class KitchenROSNode(Node):
         super().__init__('kitchen_ros_node')
         self.gui = gui  # ✅ GUI 연결
 
-        # ✅ Action 서버 생성
+        # ✅ Action 서버 생성 (주문 처리)
         self._action_server = ActionServer(
             self,
             OrderFood,
-            'order_food',  # ✅ Action 이름
+            'order_food',
             self.execute_callback,
             goal_callback=self.goal_callback,
             cancel_callback=self.cancel_callback
         )
+
+        # ✅ Service 클라이언트 생성 (로봇 명령 전송)
+        self.robot_command_client = self.create_client(RobotCommand, 'navigate_to_waypoint')
+        while not self.robot_command_client.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('Waiting for robot_command service...')
 
     def goal_callback(self, goal_request):
         """주문 수신 시 실행"""
@@ -29,7 +31,7 @@ class KitchenROSNode(Node):
         self.get_logger().info(f"Order received: {order_text}")
         if self.gui:
             self.gui.add_order(order_text)
-        return GoalResponse.ACCEPT  # ✅ 주문 수락
+        return GoalResponse.ACCEPT
 
     def cancel_callback(self, goal_handle):
         """주문 취소 요청 처리"""
@@ -59,8 +61,29 @@ class KitchenROSNode(Node):
 
         goal_handle.succeed()
 
+        # ✅ 주문 완료 시 로봇에게 이동 명령 전송
+        self.send_robot_command("S1")
+
         # ✅ 주문 완료 결과 반환
         result = OrderFood.Result()
         result.success = True
         result.message = "서빙 완료"
         return result
+
+    # ✅ 로봇 제어 명령 전송 (서비스 클라이언트 역할)
+    def send_robot_command(self, command):
+        """로봇 제어 서비스 호출"""
+        request = RobotCommand.Request()
+        request.command = command
+
+        future = self.robot_command_client.call_async(request)
+        rclpy.spin_until_future_complete(self, future)
+
+        if future.result() and future.result().success:
+            self.get_logger().info(f"로봇 명령 성공: {future.result().message}")
+            if self.gui:
+                self.gui.update_status(f"로봇 명령 성공: {future.result().message}")
+        else:
+            self.get_logger().warn("로봇 명령 실패")
+            if self.gui:
+                self.gui.update_status("로봇 명령 실패")

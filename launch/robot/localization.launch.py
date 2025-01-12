@@ -74,13 +74,14 @@ def generate_launch_description():
                 output="screen",
                 arguments=["-d", rviz_config_file],
                 parameters=[{"use_sim_time": use_sim_time}],
-            ),
+            ),           
             Node(
             package='serving_turtle',
             executable='initial_pose_publisher',
             name='initial_pose_publisher',
             output='screen',
         )
+
 
         ]
     )
