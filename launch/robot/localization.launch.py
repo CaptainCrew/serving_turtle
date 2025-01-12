@@ -6,7 +6,7 @@ from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
-
+from geometry_msgs.msg import PoseWithCovarianceStamped
 
 def generate_launch_description():
     use_sim_time = LaunchConfiguration("use_sim_time", default="True")
@@ -41,6 +41,12 @@ def generate_launch_description():
                 description="Use simulation (Gazebo) clock if true",
             ),
             Node(
+                package='serving_turtle',               # 패키지명
+                executable='initial_pose_publisher',  # 실행할 노드명
+                name='initial_pose_publisher',
+                output='screen'
+            ),
+            Node(
                 package="nav2_map_server",
                 executable="map_server",
                 name="map_server",
@@ -52,8 +58,16 @@ def generate_launch_description():
                 executable="amcl",
                 name="amcl",
                 output="screen",
-                parameters=[param_file_path, {"use_sim_time": use_sim_time}],
-            ),
+                parameters=[
+                    param_file_path,
+                    {"use_sim_time": use_sim_time},
+                    {"initial_pose_x": 2.5},
+                    {"initial_pose_y": 1.0},
+                    {"initial_pose_a": 0.0}  # 방향 (라디안)
+                ],),
+
+
+                         
             Node(
                 package="nav2_lifecycle_manager",
                 executable="lifecycle_manager",
@@ -75,12 +89,7 @@ def generate_launch_description():
                 arguments=["-d", rviz_config_file],
                 parameters=[{"use_sim_time": use_sim_time}],
             ),           
-            Node(
-            package='serving_turtle',
-            executable='initial_pose_publisher',
-            name='initial_pose_publisher',
-            output='screen',
-        )
+
 
 
         ]

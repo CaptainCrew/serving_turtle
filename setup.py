@@ -26,6 +26,6 @@ setup(
         'robot_main = serving_turtle.robot.main:main',
         'table_main = serving_turtle.table.main:main',
         'kitchen_main = serving_turtle.kitchen.main:main',
-        'initial_pose_publisher = serving_turtle.initial_pose_publisher:main',],
+        'initial_pose_publisher = serving_turtle.robot.initial_pose_publisher:main',],
     },
 )
