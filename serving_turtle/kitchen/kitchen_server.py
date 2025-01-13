@@ -27,10 +27,15 @@ class KitchenROSNode(Node):
 
     def goal_callback(self, goal_request):
         """주문 수신 시 실행"""
-        order_text = f"테이블 {goal_request.table_id}: {goal_request.quantity} x {goal_request.menu_item}"
+        table_id = goal_request.table_id
+        menu_item = goal_request.menu_item
+        quantity = goal_request.quantity
+        order_text = f"테이블 {table_id}: {quantity} x {menu_item}"
         self.get_logger().info(f"Order received: {order_text}")
+
         if self.gui:
-            self.gui.add_order(order_text)
+            # add_order 호출 시 모든 매개변수를 전달
+            self.gui.add_order(order_text, table_id, menu_item, quantity)
         return GoalResponse.ACCEPT
 
     def cancel_callback(self, goal_handle):
@@ -43,7 +48,7 @@ class KitchenROSNode(Node):
         self.get_logger().info("Processing order...")
 
         feedback_msg = OrderFood.Feedback()
-        steps = ["조리 중", "조리 완료", "서빙 중", "서빙 완료"]
+        steps = ["조리 준비", "조리 중", "조리 완료", "서빙 시작"]
 
         for i, step in enumerate(steps):
             if goal_handle.is_cancel_requested:
@@ -56,13 +61,13 @@ class KitchenROSNode(Node):
             feedback_msg.progress = (i + 1) / len(steps)
             goal_handle.publish_feedback(feedback_msg)
             self.get_logger().info(f"{step} ({feedback_msg.progress * 100:.0f}%)")
-
             time.sleep(2)  # ✅ 단계별 대기
 
         goal_handle.succeed()
 
         # ✅ 주문 완료 시 로봇에게 이동 명령 전송
         self.send_robot_command("S1")
+
 
         # ✅ 주문 완료 결과 반환
         result = OrderFood.Result()
