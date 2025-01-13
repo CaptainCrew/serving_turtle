@@ -1,0 +1,402 @@
+<sdf version='1.7'>
+  <world name='default'>
+    
+    <!-- 실내 환경용 간단한 조명 -->
+    <light name='ambient_light' type='point'>
+      <diffuse>0.5 0.5 0.5 1</diffuse>
+      <pose>0 0 5 0 0 0</pose>
+      <cast_shadows>0</cast_shadows>
+    </light>
+
+    <!-- 지면 -->
+    <model name='ground_plane'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1.0</mu>
+                <mu2>1.0</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- 중력 및 물리 설정 -->
+    <gravity>0 0 -9.8</gravity>
+    <physics type='ode'>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+
+    <!-- 간결한 환경 -->
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>0</shadows>
+    </scene>
+
+    <!-- 카메라 위치 조정 -->
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>3 -3 2 0 0.5 1.57</pose> <!-- 로봇 출발 위치 중심 -->
+        <view_controller>orbit</view_controller>
+      </camera>
+    </gui>
+
+    <!-- 장판 설치 -->
+    <model name="red_tile">
+      <static>true</static>
+      <link name="red_tile">
+        <visual name="red_tile">
+          <geometry>
+            <plane>
+              <size>3 3</size>  
+            </plane>
+          </geometry>
+          <material>
+            <ambient>1 0 0 1</ambient>  
+            <diffuse>1 0 0 1</diffuse>
+          </material>
+          <pose>4 4 0.007 0 0 0</pose>  <!-- Z축으로 살짝 띄움 -->
+        </visual>
+      </link>
+    </model>
+
+    <model name="yellow_tile">
+      <static>true</static>
+      <link name="yellow_tile">
+        <visual name="yellow_tile">
+          <geometry>
+            <plane>
+              <size>5 5</size>  
+            </plane>
+          </geometry>
+          <material>
+            <ambient>1 1 0 1</ambient>  
+            <diffuse>1 1 0 1</diffuse>
+          </material>
+          <pose>4 4 0.006 0 0 0</pose>  <!-- Z축으로 살짝 띄움 -->
+        </visual>
+      </link>
+    </model>
+
+    <model name="blue_tile">
+      <static>true</static>
+      <link name="blue_tile">
+        <visual name="blue_tile">
+          <geometry>
+            <plane>
+              <size>8 8</size>  
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0 0 1 1</ambient>  
+            <diffuse>0 0 1 1</diffuse>
+          </material>
+          <pose>4 4 0.005 0 0 0</pose>  <!-- Z축으로 살짝 띄움 -->
+        </visual>
+      </link>
+    </model>
+
+    <model name="green_tile">
+      <static>true</static>
+      <link name="link">
+        <visual name="green_tile">
+          <geometry>
+            <plane>
+              <size>4 2</size>  
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0 1 0 1</ambient>  
+            <diffuse>0 1 0 1</diffuse>
+          </material>
+          <pose>6 9 0.005 0 0 0</pose>  <!-- Z축으로 살짝 띄움 -->
+        </visual>
+      </link>
+    </model>
+
+    <model name="orange_tile">
+      <static>true</static>
+      <link name="link">
+        <visual name="orange_tile">
+          <geometry>
+            <plane>
+              <size>4 2</size>  
+            </plane>
+          </geometry>
+          <material>
+            <ambient>1 0.5 0 1</ambient>  
+            <diffuse>1 0.5 0 1</diffuse>
+          </material>
+          <pose>2 9 0.005 0 0 0</pose>  <!-- Z축으로 살짝 띄움 -->
+        </visual>
+      </link>
+    </model>
+
+    <!-- 좌석 설치 -->
+    <model name="seat1">
+      <static>true</static>
+      <link name="seat1">
+        <pose>3.25 4.75 0.2 0 0 0</pose>  <!-- 위치 (X, Y, Z) -->
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.6 0.6 0.4</size>  <!-- 크기 -->
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>  
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.6 0.6 0.4</size>  <!-- 크기 -->
+            </box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+    
+    <model name="seat2">
+      <static>true</static>
+      <link name="seat2">
+        <pose>4.75 4.75 0.2 0 0 0</pose>  <!-- 위치 (X, Y, Z) -->
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.6 0.6 0.4</size>  <!-- 크기 -->
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>  
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.6 0.6 0.4</size>  <!-- 크기 -->
+            </box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="seat3">
+      <static>true</static>
+      <link name="seat3">
+        <pose>4.75 3.25 0.2 0 0 0</pose>  <!-- 위치 (X, Y, Z) -->
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.6 0.6 0.4</size>  <!-- 크기 -->
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>  
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.6 0.6 0.4</size>  <!-- 크기 -->
+            </box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="seat4">
+      <static>true</static>
+      <link name="seat4">
+        <pose>3.25 3.25 0.2 0 0 0</pose>  <!-- 위치 (X, Y, Z) -->
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.6 0.6 0.4</size>  <!-- 크기 -->
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 1 1 1</ambient>  
+            <diffuse>1 1 1 1</diffuse>
+          </material>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.6 0.6 0.4</size>  <!-- 크기 -->
+            </box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+
+    <!-- 벽 제작 -->
+    <model name="N_wall">
+      <static>true</static>
+      <link name="N_wall">
+        <pose>4 10 0.5 0 0 0</pose>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>8 0.05 1</size>
+            </box>
+          </geometry>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>8 0.05 1</size>
+            </box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="E_wall">
+      <static>true</static>
+      <link name="E_wall">
+        <pose>8 5 0.5 0 0 0</pose>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.05 10 1</size>
+            </box>
+          </geometry>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.05 10 1</size>
+            </box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="S_wall">
+      <static>true</static>
+      <link name="link">
+        <pose>4 0 0.5 0 0 0</pose>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>8 0.05 1</size>
+            </box>
+          </geometry>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>8 0.05 1</size>
+            </box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <model name="W_wall">
+      <static>true</static>
+      <link name="link">
+        <pose>0 5 0.5 0 0 0</pose>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.05 10 1</size>
+            </box>
+          </geometry>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.05 10 1</size>
+            </box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+   <model name="KE_wall">
+      <static>true</static>
+      <link name="KE_wall">
+        <pose>4 9 0.3 0 0 0</pose>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.05 2 0.6</size>
+            </box>
+          </geometry>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.05 2 0.6</size>
+            </box>
+          </geometry>
+        </collision>
+        <material>
+          <ambient>1 1 0 1</ambient>  
+          <diffuse>1 1 0 1</diffuse>
+        </material>
+      </link>
+    </model>
+
+   <model name="KS_wall">
+      <static>true</static>
+      <link name="KS_wall">
+        <pose>2.5 8 0.3 0 0 0</pose>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>3 0.05 0.6</size>
+            </box>
+          </geometry>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>3 0.05 0.6</size>
+            </box>
+          </geometry>
+        </collision>
+        <material>
+          <ambient>1 1 0 1</ambient>  
+          <diffuse>1 1 0 1</diffuse>
+        </material>
+      </link>
+    </model>
+
+
+
+  </world>
+</sdf>

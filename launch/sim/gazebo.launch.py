@@ -17,7 +17,7 @@ def generate_launch_description():
     x_pose = LaunchConfiguration('x_pose', default='2.5')
     y_pose = LaunchConfiguration('y_pose', default='1')
 
-    world = '/home/rokey/turtlebot3_ws/src/serving_turtle/map/new_world.world'
+    world = '/home/rokey/turtlebot3_ws/src/serving_turtle/map/beautiful_world.world'
     # 상대경로 수정
     gzserver_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
