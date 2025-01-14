@@ -6,6 +6,9 @@ from turtlebot3_msgs.action import OrderFood
 class OrderActionClient(Node):
     def __init__(self, gui=None):
         super().__init__('order_action_client')
+        self.declare_parameter('table_id', 1)
+        self.table_id = self.get_parameter('table_id').get_parameter_value().integer_value
+
         self._action_client = ActionClient(self, OrderFood, 'order_food')
         self.gui = gui  # ✅ GUI 연결
         self.get_logger().info("Order Action Client Node started.")
@@ -16,8 +19,7 @@ class OrderActionClient(Node):
         goal_msg = OrderFood.Goal()
         goal_msg.menu_item = ", ".join(menu_items)
         goal_msg.quantity = total_quantity
-        goal_msg.table_id = str(table_id)
-
+        goal_msg.table_id = str(self.table_id)  # ✅ 동적으로 설정된 테이블 ID 사용
         self.get_logger().info(f"Sending Order: {goal_msg.menu_item} (Quantity: {goal_msg.quantity}) to Table {goal_msg.table_id}")
         self.gui.update_status("주문 전송 중...", "blue")  # ✅ 상태 업데이트
 

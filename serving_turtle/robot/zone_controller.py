@@ -55,38 +55,38 @@ class ZoneMaskPublisher(Node):
         """OccupancyGrid 마스크 생성"""
         mask = OccupancyGrid()
         mask.header.frame_id = "map"
-        mask.info.resolution = 0.05
-        mask.info.width = 200
-        mask.info.height = 200
+        mask.info.resolution = 0.05  # 해상도 유지
+        mask.info.width = 25         # ✅ 가로 크기 절반으로 줄임
+        mask.info.height = 25        # ✅ 세로 크기 절반으로 줄임
         mask.info.origin.position.x = 2.5
         mask.info.origin.position.y = 1.0
 
-        # 마스크 데이터 생성
-        data = np.zeros((200, 200), dtype=np.int8)
+        # ✅ 마스크 데이터 크기 조정
+        data = np.zeros((25, 25), dtype=np.int8)
 
-        # 구역별 위치 지정 (버그 수정 포함)
+        # 구역별 위치 지정 (축소된 범위에 맞게 수정)
         if filter_type == 'k':
             if zone_id == 1:
-                data[55:85, 55:85] = cost_value
+                data[0:15, 10:20] = cost_value  # ✅ 축소
             elif zone_id == 2:
-                data[85:115, 55:85] = cost_value
+                data[15:25, 10:20] = cost_value  # ✅ 축소
             elif zone_id == 3:
-                data[55:85, 85:115] = cost_value
+                data[0:15, 20:25] = cost_value  # ✅ 축소
             elif zone_id == 4:
-                data[85:115, 115:145] = cost_value  # ✅ 수정됨
+                data[15:25, 20:25] = cost_value  # ✅ 축소
+
         elif filter_type == 'a':
             if zone_id == 1:
-                data[35:85, 35:85] = cost_value
+                data[5:15, 5:15] = cost_value  # ✅ 축소
             elif zone_id == 2:
-                data[35:85, 135:185] = cost_value  # ✅ 수정됨
+                data[5:15, 15:25] = cost_value  # ✅ 축소
             elif zone_id == 3:
-                data[85:135, 85:135] = cost_value
+                data[15:25, 5:15] = cost_value  # ✅ 축소
             elif zone_id == 4:
-                data[85:135, 135:185] = cost_value  # ✅ 수정됨
+                data[15:25, 15:25] = cost_value  # ✅ 축소
 
         mask.data = data.flatten().tolist()
         return mask
-
 def main(args=None):
     rclpy.init(args=args)
     node = ZoneMaskPublisher()

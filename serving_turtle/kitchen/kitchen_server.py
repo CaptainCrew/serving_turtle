@@ -32,7 +32,7 @@ class KitchenROSNode(Node):
         quantity = goal_request.quantity
         order_text = f"테이블 {table_id}: {quantity} x {menu_item}"
         self.get_logger().info(f"Order received: {order_text}")
-
+        goal_request.table_id = table_id
         if self.gui:
             # add_order 호출 시 모든 매개변수를 전달
             self.gui.add_order(order_text, table_id, menu_item, quantity)
@@ -64,9 +64,9 @@ class KitchenROSNode(Node):
             time.sleep(2)  # ✅ 단계별 대기
 
         goal_handle.succeed()
-
+        table_id = goal_handle.request.table_id
         # ✅ 주문 완료 시 로봇에게 이동 명령 전송
-        self.send_robot_command("S1")
+        self.send_robot_command("S"+str(table_id))
 
 
         # ✅ 주문 완료 결과 반환

@@ -5,11 +5,11 @@ class Waypoints:
     def __init__(self, node):
         self.node = node
         self.waypoints = {
-            'HOME': self.create_pose_stamped(2.5, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0),
-            'KITCHEN': self.create_pose_stamped(4.5, 5.5, 0.0, 0.0, 0.0, 0.0, 1.0),
+            'HOME': self.create_pose_stamped(7.0, 9.0, 0.0, 0.0, 0.0, 0.0, 1.0),
+            'KITCHEN': self.create_pose_stamped(2.0, 7.0, 0.0, 0.0, 0.0, 0.0, 1.0),
             'S1': self.create_pose_stamped(2.0, 4.0, 0.0, 0.0, 0.0, 0.0, 1.0),
-            'S2': self.create_pose_stamped(4.0, 4.0, 0.0, 0.0, 0.0, 0.0, 1.0),
-            'S3': self.create_pose_stamped(2.0, 2.0, 0.0, 0.0, 0.0, 0.7071, 0.7071),
+            'S2': self.create_pose_stamped(2.0, 2.5, 0.0, 0.0, 0.0, 0.0, 1.0),
+            'S3': self.create_pose_stamped(5.0, 2.0, 0.0, 0.0, 0.0, 0.7071, 0.7071),
             'S4': self.create_pose_stamped(4.0, 2.0, 0.0, 0.0, 0.0, 1.0, 0.0)
         }
 

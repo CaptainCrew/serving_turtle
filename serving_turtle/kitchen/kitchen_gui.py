@@ -1,6 +1,6 @@
 import tkinter as tk
 from serving_turtle.kitchen.database_handler import DatabaseHandler
-
+from serving_turtle.kitchen.kitchen_server import KitchenROSNode
 
 class KitchenGUI:
     def __init__(self, ros_node):
@@ -33,6 +33,8 @@ class KitchenGUI:
         )
         self.today_menu_sales_button.pack(pady=10)
 
+        self.kitchen_ros_node = KitchenROSNode()
+
     def update_status(self, message, color):
         """GUI 상태 업데이트"""
         self.order_list.insert(tk.END, message)
@@ -52,13 +54,14 @@ class KitchenGUI:
         selected_index = self.order_list.curselection()  # 선택된 항목의 인덱스 가져오기
         if not selected_index:
             return  # 선택되지 않은 경우 아무 작업도 하지 않음
+        self.kitchen_ros_node.send_robot_command("KITCHEN")
 
         selected = self.order_list.get(selected_index)  # 선택된 항목 텍스트 가져오기
 
         # 이미 처리된 주문은 상태를 변경하지 않음
         if selected.endswith("- Accepted") or selected.endswith("- Rejected"):
             return
-        self.ros_node.accept_pending_goal(selected)
+        #self.ros_node.accept_pending_goal(selected)
 
         table_id = int(selected.split(" ")[1].replace(":", ""))  # 테이블 ID 추출
         self.ros_node.publish_status(selected, 'Accepted')  # ROS 노드에 수락 상태 전송
@@ -69,7 +72,7 @@ class KitchenGUI:
         self.order_list.delete(selected_index)  # 기존 항목 삭제
         self.order_list.insert(selected_index, updated_text)  # 업데이트된 항목 삽입
         self.order_list.itemconfig(selected_index, {'fg': 'green'})  # 항목의 색상 변경
-
+        
 
     def reject_order(self):
         """주문 거절"""
@@ -78,6 +81,8 @@ class KitchenGUI:
             return  # 선택되지 않은 경우 아무 작업도 하지 않음
 
         selected = self.order_list.get(selected_index)  # 선택된 항목 텍스트 가져오기
+        table_id = int(selected.split(" ")[1].replace(":", ""))  # 테이블 ID 추출
+        self.kitchen_ros_node.send_robot_command("S"+str(table_id))    
 
         # 이미 처리된 주문은 상태를 변경하지 않음
         if selected.endswith("- Accepted") or selected.endswith("- Rejected"):
